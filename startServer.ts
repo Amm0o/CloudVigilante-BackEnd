@@ -1,9 +1,10 @@
 import { processDataRoute } from "./routes/processData";
 import {connect} from "./models/dbConnector";
+import { Pool } from "mysql2/promise";
 
 
 export async function startServer() {
-    let dbConnection;
+    let dbConnection: Pool;
     
     try {
         dbConnection = await connect(); // Connect to the database
