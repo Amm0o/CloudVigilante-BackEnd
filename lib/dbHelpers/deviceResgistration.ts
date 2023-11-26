@@ -1,18 +1,18 @@
-import { Pool } from "mysql2/promise";
+import { Pool, RowDataPacket } from "mysql2/promise";
 
 
 export async function registerDevice(data: Object, connectionPool: Pool) {
 
 
-    console.log(typeof data[0]);
-    const deviceID = data[0].DeviceID;
-    const tenantID = data[0].TenantID;
-    const deviceName = data[0].DeviceName;
+    // console.log(typeof (data as { DeviceID: string }[])[0]);
+    const deviceID = (data as { DeviceID: string }[])[0].DeviceID;
+    const tenantID = (data as { TenantID: string }[])[0].TenantID;
+    const deviceName = (data as { DeviceName: string }[])[0].DeviceName;
 
     // Logic to test if the device is registered if not adding it
     try {
         // Query the database for the deviceID
-        const [rows] = await connectionPool.query(
+        const [rows]: [RowDataPacket[]] = await connectionPool.query(
             "SELECT 1 FROM Devices WHERE DeviceID = ? LIMIT 1",
             [deviceID.trim()]
         );

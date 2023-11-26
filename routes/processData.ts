@@ -8,7 +8,6 @@ export async function processDataRoute (req: Request, connectionPool: Pool) {
 
     try {
         // Get and Parse the request body
-
         const body = await req.text();
         const data = JSON.parse(body); // Json blob containing the data from client
 
@@ -22,7 +21,7 @@ export async function processDataRoute (req: Request, connectionPool: Pool) {
 
 
         // Send data to the database
-
+        
 
 
 
