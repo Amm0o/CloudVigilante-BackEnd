@@ -72,3 +72,19 @@ CREATE TABLE Device_Process_Link (
 - **Data Integrity and Consistency**: Since you are manually handling the IDs, ensure the application logic correctly maintains the uniqueness and consistency of these IDs across different tables.
 - **Indexing and Performance**: UUIDs as primary keys can have performance implications, especially in large databases. Consider the impact on indexing and query performance.
 - **Updating Existing Data**: If you're modifying an existing database, you'll need to migrate your data to the new schema, ensuring that all foreign key relationships are correctly updated.
+
+
+
+
+# Quality of life Queries:
+
+## Get table size()
+
+SELECT 
+  table_name AS 'Table', 
+  ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'Size in MB' 
+FROM 
+  information_schema.TABLES 
+WHERE 
+  table_schema = 'CloudVigilante' AND 
+  table_name = 'Processes';
