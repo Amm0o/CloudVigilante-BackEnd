@@ -1,5 +1,6 @@
 import { Pool } from "mysql2/promise";
 import { registerDevice } from "../lib/dbHelpers/deviceResgistration.ts";
+import { performanceTelemetry } from "../lib/dbHelpers/performanceTelemetry.ts";
 
 export async function processDataRoute (req: Request, connectionPool: Pool) {
     if (req.method !== "POST") {
@@ -11,7 +12,7 @@ export async function processDataRoute (req: Request, connectionPool: Pool) {
         const body = await req.text();
         const data = JSON.parse(body); // Json blob containing the data from client
 
-        
+        // console.log("Data received from client: ", data);
         console.log("Received data, thanks! ");
         
         // Check if the device is registered
@@ -21,7 +22,8 @@ export async function processDataRoute (req: Request, connectionPool: Pool) {
 
 
         // Send data to the database
-        
+        performanceTelemetry(data, connectionPool);
+        console.log("Performance telemetry inserted successfully!");
 
 
 
