@@ -1,6 +1,7 @@
 import { processDataRoute } from "./routes/processData";
 import {connect} from "./models/dbConnector";
 import { Pool } from "mysql2/promise";
+import {sendPerformanceTelemetry} from "./routes/sendRealTimePerformance";
 
 
 export async function startServer() {
@@ -16,11 +17,24 @@ export async function startServer() {
 
     const server = Bun.serve({
         fetch(req: Request) {
+
+            // Set CORS headers
+            const headers = new Headers({
+                "Access-Control-Allow-Origin": "*", // Allow any origin
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS", // Allowed methods
+                "Access-Control-Allow-Headers": "Content-Type, Authorization" // Allowed headers
+            });
     
             // Get URL PATH
             const url = new URL(req.url);
             const urlPath = url.pathname;
     
+            // Handle preflight requests for CORS
+            if (req.method === "OPTIONS") {
+                return new Response(null, { headers });
+            }
+
+
             // Check if it's a POST request to the specific endpoint
             if (req.method === "POST") {
     
@@ -31,6 +45,17 @@ export async function startServer() {
                 return new Response("Not Found", { status: 404 });
               }
                 
+            } 
+            
+            // GET Routes
+            if (req.method === "GET") { 
+              // Real Time Performance sender
+              if (urlPath === "/api/dev/v1/realtime-performance") {
+                console.log("Real Time Performance Requested");
+                return sendPerformanceTelemetry(req, dbConnection);
+              } else {
+                return new Response("Not Found", { status: 404 });
+              }
             }
             
         },
@@ -45,6 +70,8 @@ export async function startServer() {
 
     console.log(`Server running on ${server.hostname}:${server.port}...`);
 }
+
+
 
 
 

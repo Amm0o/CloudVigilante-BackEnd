@@ -26,7 +26,6 @@ export async function processDataRoute (req: Request, connectionPool: Pool) {
         console.log("Performance telemetry inserted successfully!");
 
 
-
         // Send response back
         return new Response("Data received and processed", { status: 200 });
     } catch (error) {
