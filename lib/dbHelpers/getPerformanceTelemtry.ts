@@ -27,7 +27,7 @@ export async function getPerformanceTelemtry(connectionPool: any, timeFrameInt: 
 
     // Create a list of parameters for the IN clause based on the topProcesses
     const parameters: any = [];
-    topProcesses.forEach(process => {
+    topProcesses.forEach((process: { ProcessName: any; ProcessID: any; }) => {
     parameters.push(process.ProcessName, process.ProcessID);
     });
 
